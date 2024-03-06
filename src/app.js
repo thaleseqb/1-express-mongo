@@ -14,17 +14,40 @@ const books = [
     }
 ];
 
-app.get("/", (req,res)=>{
+function searchBook(id){
+    return books.findIndex((book) => {
+        return book.id === Number(id)
+    });
+};
+
+app.get("/", (req, res)=>{
     res.status(200).send('Curso de Node.js');
 });
 
-app.get("/livros", (req,res) => {
+app.get("/livros", (req, res) => {
     res.status(200).json(books);
 });
 
-app.post("/livros", (req,res)=>{
+app.post("/livros", (req, res)=>{
     books.push(req.body);
     res.status(201).send("Livro cadastrado com sucesso")
+});
+
+app.get("/livros/:id", (req, res)=>{
+    const index = searchBook(req.params.id);
+    res.status(200).json(books[index]);
+});
+
+app.put("/livros/:id", (req,res) => {
+    const index = searchBook(req.params.id);
+    books[index].title = req.body.title;
+    res.status(200).json(books);
+});
+
+app.delete("/livros/:id", (req, res) => {
+    const index = searchBook(req.params.id);
+    books.splice(index, 1);
+    res.status(200).send('deleted book');
 });
 
 export default app;
