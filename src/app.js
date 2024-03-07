@@ -1,5 +1,6 @@
 import express from 'express';
 import connectToDataBase from './config/dbConcect.js';
+import book from './models/book.js'
 
 const connection = await connectToDataBase();
 
@@ -14,33 +15,18 @@ connection.once("open", ()=>{
 const app = express();
 app.use(express.json());
 
-const books = [
-    {
-        id:1,
-        title: "Lords of the ring"
-    },
-    {
-        id:2,
-        title: "The Hobbit"
-    }
-];
-
-function searchBook(id){
-    return books.findIndex((book) => {
-        return book.id === Number(id)
-    });
-};
-
 app.get("/", (req, res)=>{
     res.status(200).send('Curso de Node.js');
 });
 
-app.get("/livros", (req, res) => {
-    res.status(200).json(books);
+app.get("/livros", async (req, res) => {
+    const bookList = await book.find({});
+    res.status(200).json(bookList);
 });
 
-app.post("/livros", (req, res)=>{
-    books.push(req.body);
+app.post("/livros", async (req, res)=>{
+    const bookList = await book.find({});
+    bookList.push(req.body);
     res.status(201).send("Livro cadastrado com sucesso")
 });
 
