@@ -1,4 +1,15 @@
 import express from 'express';
+import connectToDataBase from './config/dbConcect.js';
+
+const connection = await connectToDataBase();
+
+connection.on('error', (error)=>{
+    console.error("CONNECTION ERROR", error);
+});
+
+connection.once("open", ()=>{
+    console.log("connection established successfully")
+})
 
 const app = express();
 app.use(express.json());
