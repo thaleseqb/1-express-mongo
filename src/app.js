@@ -15,26 +15,4 @@ connection.once("open", ()=>{
 const app = express();
 routes(app);
 
-app.get("/", (req, res)=>{
-    res.status(200).send('Curso de Node.js');
-});
-
-
-app.get("/livros/:id", (req, res)=>{
-    const index = searchBook(req.params.id);
-    res.status(200).json(books[index]);
-});
-
-app.put("/livros/:id", (req,res) => {
-    const index = searchBook(req.params.id);
-    books[index].title = req.body.title;
-    res.status(200).json(books);
-});
-
-app.delete("/livros/:id", (req, res) => {
-    const index = searchBook(req.params.id);
-    books.splice(index, 1);
-    res.status(200).send('deleted book');
-});
-
 export default app;
